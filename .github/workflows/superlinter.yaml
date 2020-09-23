@@ -24,4 +24,4 @@ jobs:
         uses: github/super-linter@v3.11.0
         env:
           VALUDATE_ALL_CODEBASE: false
-          VALUDATE_OPE_API: true
+          VALUDATE_OPEN_API: true
