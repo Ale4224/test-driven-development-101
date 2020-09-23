@@ -1,0 +1,122 @@
+openapi: 3.0.3
+tags:
+   - name: public
+info:
+  version: "0.1"
+  x-api-id: 123
+  description: "descrizione"
+  title: titolo
+  x-summary: www.ciao.com
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "Ale"
+    email: "asd@asd.asd"
+paths:
+  /status:
+    get:
+      tags:
+      - public
+      summary: Return the application status.
+      description: |
+        Return the application status. You may want
+        to implement this so that it randomically
+        returns an error (eg. 429 or 503).
+      operationId: api.get_status
+      responses:
+        '200':
+          description: |
+            The status is OK.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        'default':
+          description: |
+            default status
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /echo:
+    get:
+      summary: Return the application status.
+      description: |
+        Return timestamp if status code is 200, otherwise return the Problem
+      operationId: api.echo
+      responses:
+        '200':
+          description: |
+            Echo timestamp
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISOTimestamp'
+        'default':
+          description: |
+            default status
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+
+servers:
+  - description: dev
+    url: /datetime/v1
+  - description: prod
+    url: https://api.example.com/datetime/v1
+components:
+  schemas:
+    Success:
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+      properties:
+        status: 
+          example: 200
+        title:
+          example: OK
+        detail:
+          example: Tutto OK
+    Problem:
+      title: Problema
+      properties:
+        status:
+          type: number
+          example: 500
+          format: int32
+        title:
+          type: string
+          example: InternalServerError
+        detail:
+          type: string
+          example: Errore generico del server
+    Citizen:
+      title: Cittadino
+      description: |-
+        Descrizione di un cittadino
+      example: 
+        given_name: ciao
+        family_name: ciao
+        tax_code: ciao
+      type: object
+      nullable: true
+      required: 
+      - tax_code
+      properties:
+        given_name:
+          type: string
+          example: Leon Battista
+        family_name:
+          type: string
+          example: Alberti
+        tax_code:
+          type: string
+          pattern: /^[A-Z0-9]{16}/
+          example: LBRLBT72D25D9
+    ISOTimestamp:
+      title: ISOTimestamp
+      description: Timestamp formato ISO
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: "2020-01-01T00:00:00Z"
